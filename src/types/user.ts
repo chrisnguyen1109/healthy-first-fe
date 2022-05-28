@@ -1,10 +1,15 @@
-import { HasId, ResponseData, TimeStamp } from './common';
+import { HasId, QueryParms, ResponseData, TimeStamp } from './common';
 
 export enum UserRole {
     ADMIN = 'admin',
     MANAGER = 'manager',
     EXPERT = 'expert',
 }
+
+export const USER_ROLE_OPTIONS = Object.values(UserRole).map(el => ({
+    key: el.toUpperCase(),
+    value: el,
+}));
 
 export interface LoginForm {
     email: string;
@@ -19,6 +24,38 @@ export interface User extends HasId, TimeStamp {
     provinceCode?: number;
     districtCode?: number;
     status: boolean;
+    provinceName?: string;
+    districtName?: string;
 }
 
+export interface UserCreate {
+    fullName: string;
+    email: string;
+    password: string;
+    avatar?: string;
+    role: UserRole;
+    provinceCode?: number;
+    districtCode?: number;
+}
+
+export type UserFields =
+    | 'fullName'
+    | 'email'
+    | 'role'
+    | 'status'
+    | 'provinceName'
+    | 'districtName';
+
+export interface UserFilter {
+    _q: string;
+    role: UserRole;
+    status: boolean;
+    provinceCode: number;
+    districtCode: number;
+}
+
+export type UserQuery = Partial<QueryParms<UserFields> & Partial<UserFilter>>;
+
 export type UserRecordResponse = ResponseData<User>;
+
+export type UserListResponse = ResponseData<User[]>;

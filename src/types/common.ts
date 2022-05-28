@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 export interface HasId {
     _id: string;
 }
@@ -23,3 +25,18 @@ export interface ResponseData<T = any> {
         ? { record: T }
         : T;
 }
+
+export interface QueryParms<T extends string> {
+    page: number;
+    limit: number;
+    sort: `${'-' | ''}${T}` | `${'-' | ''}${T}`[];
+}
+
+export type CallBack<T = any> = (args?: T) => void;
+
+export type ColumnsType<T extends object = any> = {
+    title: string;
+    key: keyof T;
+    render?: (value: any) => ReactNode;
+    width?: number;
+}[];

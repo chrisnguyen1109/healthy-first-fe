@@ -1,6 +1,5 @@
 import { logoutApi } from '@/api/authApi';
 import { QUERY_AUTH } from '@/config';
-import { useAuthentication } from '@/hooks';
 import { useEffect, useState } from 'react';
 import { Image, Spinner } from 'react-bootstrap';
 import { useMutation, useQueryClient } from 'react-query';
@@ -9,8 +8,6 @@ import { Link } from 'react-router-dom';
 const UserDropdown: React.FC = () => {
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
     const queryClient = useQueryClient();
-
-    const { data: currentAuth } = useAuthentication();
 
     const { mutate, isLoading } = useMutation(logoutApi, {
         onSuccess: () => {
@@ -26,7 +23,7 @@ const UserDropdown: React.FC = () => {
         document.body.addEventListener('click', onBodyClick);
 
         return () => document.body.removeEventListener('click', onBodyClick);
-    });
+    }, []);
 
     const toggleDropdownClick = (
         e: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -62,9 +59,9 @@ const UserDropdown: React.FC = () => {
                         showDropdown && 'show'
                     }`}
                 >
-                    <Link to="" className="dropdown-item">
+                    <Link to="/profile" className="dropdown-item">
                         <i className="ti-user m-r-10 m-l-5"></i>
-                        {currentAuth?.data?.record.fullName}
+                        My profile
                     </Link>
                     <li
                         className="dropdown-item cursor-pointer"

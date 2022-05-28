@@ -2,7 +2,11 @@ import { Button, Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import UserDropdown from './UserDropdown';
 
-const TopbarHeader: React.FC = () => {
+interface TopbarHeaderProps {
+    onShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const TopbarHeader: React.FC<TopbarHeaderProps> = ({ onShowSidebar }) => {
     return (
         <header className="topbar" data-navbarbg="skin6">
             <nav className="navbar top-navbar navbar-expand-md navbar-light">
@@ -40,6 +44,7 @@ const TopbarHeader: React.FC = () => {
                     <Button
                         variant="outline-secondary"
                         className="d-block d-md-none m-r-15"
+                        onClick={() => onShowSidebar(prev => !prev)}
                     >
                         <i className="mdi mdi-menu"></i>
                     </Button>

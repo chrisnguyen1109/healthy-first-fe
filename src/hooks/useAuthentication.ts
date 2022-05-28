@@ -16,7 +16,7 @@ export const useAuthentication = (
           >
         | undefined = {}
 ) =>
-    useQuery<UserRecordResponse, unknown>(QUERY_AUTH, getMeApi, {
+    useQuery<UserRecordResponse>(QUERY_AUTH, getMeApi, {
         staleTime: Infinity,
         ...options,
     });

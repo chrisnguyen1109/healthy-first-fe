@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
 import 'react-toastify/dist/ReactToastify.css';
+import DialogProvider from './DialogProvider';
 
 interface AppProviderProps {
     children: ReactNode;
@@ -24,7 +25,7 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     return (
         <BrowserRouter>
             <QueryClientProvider client={queryClient}>
-                {children}
+                <DialogProvider>{children}</DialogProvider>
                 <ToastContainer />
                 <ReactQueryDevtools initialIsOpen={false} />
             </QueryClientProvider>
