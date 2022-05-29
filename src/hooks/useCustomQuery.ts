@@ -5,7 +5,7 @@ import {
     fetchList,
     updateItem,
 } from '@/api/fetchApi';
-import { HasId, ResponseData } from '@/types';
+import { HasId, ResponseData, UpdateProps } from '@/types';
 import {
     QueryKey,
     useMutation,
@@ -18,11 +18,6 @@ import {
 export interface Feature {
     queryKey: string;
     service: string;
-}
-
-interface UpdateProps<X> {
-    id: string;
-    body: Partial<X>;
 }
 
 const initialCustomQuery = <
@@ -86,11 +81,8 @@ const initialCustomQuery = <
                     service: feature.service,
                 }),
             {
-                onSuccess: data => {
-                    if (data.message === 'Success' && data.data?.record) {
-                        clientQuery.invalidateQueries(feature.queryKey);
-                    }
-                },
+                onSettled: () =>
+                    clientQuery.invalidateQueries(feature.queryKey),
                 ...options,
             }
         );
@@ -112,11 +104,8 @@ const initialCustomQuery = <
                     service: feature.service,
                 }),
             {
-                onSuccess: data => {
-                    if (data.message === 'Success' && data.data?.record) {
-                        clientQuery.invalidateQueries(feature.queryKey);
-                    }
-                },
+                onSettled: () =>
+                    clientQuery.invalidateQueries(feature.queryKey),
                 ...options,
             }
         );
@@ -137,7 +126,7 @@ const initialCustomQuery = <
                     service: feature.service,
                 }),
             {
-                onSuccess: () =>
+                onSettled: () =>
                     clientQuery.invalidateQueries(feature.queryKey),
                 ...options,
             }

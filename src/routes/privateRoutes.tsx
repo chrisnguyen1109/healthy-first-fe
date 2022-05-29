@@ -3,8 +3,15 @@ import React from 'react';
 import { Outlet, RouteObject } from 'react-router-dom';
 
 const Dashboard = React.lazy(() => import('@/pages/dashboard'));
+
 const UserList = React.lazy(() => import('@/pages/user'));
 const CreateUser = React.lazy(() => import('@/pages/user/CreateUser'));
+
+const FacilityList = React.lazy(() => import('@/pages/facility'));
+const CreateFacility = React.lazy(
+    () => import('@/pages/facility/CreateFacility')
+);
+const EditFacility = React.lazy(() => import('@/pages/facility/EditFacility'));
 
 const App = () => {
     return (
@@ -22,6 +29,9 @@ const privateRoutes: RouteObject[] = [
             { index: true, element: <Dashboard /> },
             { path: '/user', element: <UserList /> },
             { path: '/user/create', element: <CreateUser /> },
+            { path: '/facility', element: <FacilityList /> },
+            { path: '/facility/create', element: <CreateFacility /> },
+            { path: '/facility/edit/:id', element: <EditFacility /> },
         ],
     },
 ];

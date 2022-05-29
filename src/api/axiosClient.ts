@@ -63,7 +63,7 @@ axiosClient.interceptors.response.use(
             errorMessage = 'Something went wrong!';
         }
 
-        calledApi && toast.error(errorMessage);
+        calledApi && toast.error(errorMessage || 'Something went wrong!');
 
         calledApi = true;
 

@@ -1,6 +1,14 @@
-import { ColumnsType, HasId } from '@/types';
+import {
+    ColumnsType,
+    HasId,
+    Pagination,
+    SortChangeProps,
+    SortType,
+} from '@/types';
 import { ReactNode } from 'react';
 import CardLayout from './CardLayout';
+import TablePagination from './TablePagination';
+import TableSort from './TableSort';
 
 interface DataType extends HasId {
     [key: string]: any;
@@ -10,13 +18,30 @@ interface CustomTableProps {
     title: string;
     subtitle?: ReactNode;
     control?: ReactNode;
-    columns: ColumnsType;
+    columns: ColumnsType[];
     dataSource: DataType[];
     actions?: (data: any) => ReactNode;
     isLoading?: boolean;
+    onSortChange: (sortObject: SortChangeProps) => void;
 }
 
-const CustomTable: React.FC<CustomTableProps> = ({
+interface CustomTableWithoutPaginationProps extends CustomTableProps {
+    showPagination: false;
+    onPageChange?: never;
+    pagination?: never;
+    onPageLimitChange?: never;
+}
+
+interface CustomTableWithPaginationProps extends CustomTableProps {
+    showPagination?: true;
+    onPageChange: (selected: number) => void;
+    pagination: Pagination;
+    onPageLimitChange: (selected: number) => void;
+}
+
+const CustomTable: React.FC<
+    CustomTableWithoutPaginationProps | CustomTableWithPaginationProps
+> = ({
     title,
     subtitle,
     control,
@@ -24,7 +49,35 @@ const CustomTable: React.FC<CustomTableProps> = ({
     dataSource,
     actions,
     isLoading,
+    pagination,
+    onPageChange,
+    onPageLimitChange,
+    showPagination = true,
+    onSortChange,
 }) => {
+    const sortChangeHandler = (column: ColumnsType) => {
+        switch (column.sortType) {
+            case SortType.ASC: {
+                return onSortChange({
+                    field: column.key,
+                    sortType: SortType.DESC,
+                });
+            }
+            case SortType.DESC: {
+                return onSortChange({
+                    field: column.key,
+                    sortType: null,
+                });
+            }
+            default: {
+                return onSortChange({
+                    field: column.key,
+                    sortType: SortType.ASC,
+                });
+            }
+        }
+    };
+
     return (
         <CardLayout>
             {isLoading && <div className="overlay-loader"></div>}
@@ -41,10 +94,21 @@ const CustomTable: React.FC<CustomTableProps> = ({
                         <tr>
                             {columns.map(column => (
                                 <th
-                                    className="border-top-0 text-align-center"
+                                    className="border-top-0 text-align-center cursor-pointer"
                                     key={column.key as string}
                                 >
-                                    {column.title}
+                                    <div
+                                        onClick={() =>
+                                            sortChangeHandler(column)
+                                        }
+                                    >
+                                        {column.title}
+                                        {column.showSort && (
+                                            <TableSort
+                                                sortType={column.sortType}
+                                            />
+                                        )}
+                                    </div>
                                 </th>
                             ))}
                             {actions && (
@@ -61,18 +125,25 @@ const CustomTable: React.FC<CustomTableProps> = ({
                                     return (
                                         <td
                                             key={column.key as string}
-                                            style={{
-                                                width: column.width
-                                                    ? `${column.width}px`
-                                                    : 'auto',
-                                            }}
                                             className="text-align-center"
                                         >
-                                            {column.render
-                                                ? column.render(
-                                                      data[column.key as string]
-                                                  )
-                                                : data[column.key as string]}
+                                            <div
+                                                style={{
+                                                    width: column.width
+                                                        ? `${column.width}px`
+                                                        : 'auto',
+                                                }}
+                                            >
+                                                {column.render
+                                                    ? column.render(
+                                                          data[
+                                                              column.key as string
+                                                          ]
+                                                      )
+                                                    : data[
+                                                          column.key as string
+                                                      ]}
+                                            </div>
                                         </td>
                                     );
                                 })}
@@ -86,6 +157,18 @@ const CustomTable: React.FC<CustomTableProps> = ({
                     </tbody>
                 </table>
             </div>
+
+            {showPagination && (
+                <div className="mt-5 d-flex justify-content-end gap-3 align-items-center">
+                    <TablePagination
+                        pageCount={pagination!.totalPage}
+                        currentPage={pagination!.page - 1}
+                        onPageChange={onPageChange!}
+                        pageLimit={pagination!.limit}
+                        onPageLimitChange={onPageLimitChange!}
+                    />
+                </div>
+            )}
         </CardLayout>
     );
 };

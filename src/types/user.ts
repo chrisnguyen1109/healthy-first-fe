@@ -7,9 +7,20 @@ export enum UserRole {
 }
 
 export const USER_ROLE_OPTIONS = Object.values(UserRole).map(el => ({
-    key: el.toUpperCase(),
+    key: el.replace(/\b\w/g, c => c.toUpperCase()),
     value: el,
 }));
+
+export const USER_STATUS_OPTIONS = [
+    {
+        key: 'Active',
+        value: 'true',
+    },
+    {
+        key: 'Inactive',
+        value: 'false',
+    },
+];
 
 export interface LoginForm {
     email: string;
@@ -50,8 +61,6 @@ export interface UserFilter {
     _q: string;
     role: UserRole;
     status: boolean;
-    provinceCode: number;
-    districtCode: number;
 }
 
 export type UserQuery = Partial<QueryParms<UserFields> & Partial<UserFilter>>;

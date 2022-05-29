@@ -1,46 +1,42 @@
 import { DEFAULT_FILTER } from '@/config';
-import { useDeleteUser, useUpdateUser, useUsers } from '@/hooks';
-import { SortChangeProps, SortType, UserFilter, UserQuery } from '@/types';
+import { useDeleteFacility, useFacilities } from '@/hooks';
+import {
+    SortChangeProps,
+    SortType,
+    FacilityFilter,
+    FacilityQuery,
+} from '@/types';
 import { convertSortFilter } from '@/utils';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import UserSearch from './components/UserSearch';
-import UserTable from './components/UserTable';
+import FacilitySearch from './components/FacilitySearch';
+import FacilityTable from './components/FacilityTable';
 
-const UserList: React.FC = () => {
-    const [filter, setFilter] = useState<UserQuery>(DEFAULT_FILTER);
+const FacilityList: React.FC = () => {
+    const [filter, setFilter] = useState<FacilityQuery>(DEFAULT_FILTER);
 
     const [sortQuery, setSortQuery] = useState<Record<
         string,
         SortType | null
     > | null>(null);
 
-    const usersFilter = sortQuery
+    const facilitiesFilter = sortQuery
         ? {
               ...filter,
               _sort: convertSortFilter(sortQuery) as any,
           }
         : filter;
 
-    const { data, isLoading } = useUsers(usersFilter, {
+    const { data, isLoading } = useFacilities(facilitiesFilter, {
         keepPreviousData: true,
     });
 
-    const { mutate: mutateInactiveUser, isLoading: deletingUser } =
-        useDeleteUser({
+    const { mutate: mutateDeleteFacility, isLoading: deletingFacility } =
+        useDeleteFacility({
             onSuccess: () => {
-                toast.success('Disable user successfully!');
+                toast.success('Delete facility successfully!');
             },
         });
-    const { mutate: muatteActiveUser, isLoading: updatingUser } = useUpdateUser(
-        {
-            onSuccess: response => {
-                if (response.message === 'Success' && response.data?.record) {
-                    toast.success('Active user successfully!');
-                }
-            },
-        }
-    );
 
     const pageChangeHandler = (selected: number) => {
         setFilter(prev => ({
@@ -64,7 +60,7 @@ const UserList: React.FC = () => {
         }));
     };
 
-    const searchUsersHandler = (data: Partial<UserFilter>) => {
+    const searchFacilitiesHandler = (data: Partial<FacilityFilter>) => {
         setFilter(prev => ({
             ...prev,
             _page: 1,
@@ -72,32 +68,31 @@ const UserList: React.FC = () => {
         }));
     };
 
-    const resetSearchUsersHandler = () => {
+    const resetSearchFacilitiesHandler = () => {
         setFilter(() => DEFAULT_FILTER);
         setSortQuery(null);
     };
 
-    const tableLoading = isLoading || updatingUser || deletingUser;
+    const tableLoading = isLoading || deletingFacility;
 
     return (
         <div>
-            <UserSearch
+            <FacilitySearch
                 formLoading={tableLoading}
-                onSearchChange={searchUsersHandler}
-                onResetTable={resetSearchUsersHandler}
+                onSearchChange={searchFacilitiesHandler}
+                onResetTable={resetSearchFacilitiesHandler}
             />
-            <UserTable
+            <FacilityTable
                 tableLoading={tableLoading}
-                userListResponse={data!}
-                onInactiveUser={mutateInactiveUser}
-                onActiveUser={muatteActiveUser}
+                facilityListResponse={data!}
                 onPageChange={pageChangeHandler}
                 onPageLimitChange={pageLimitChangeHandler}
                 onSortChange={sortUserTableHandler}
                 sortQuery={sortQuery ?? {}}
+                onDeleteFacility={mutateDeleteFacility}
             />
         </div>
     );
 };
 
-export default UserList;
+export default FacilityList;

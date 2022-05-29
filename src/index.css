@@ -79,3 +79,13 @@
     opacity: 0.2;
     filter: alpha(opacity=40);
 }
+
+.pagination {
+    margin-bottom: 0;
+}
+
+.text-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

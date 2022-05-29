@@ -1,3 +1,4 @@
+import { FormOptions } from '@/types';
 import { Field, FieldProps } from 'formik';
 import { Form } from 'react-bootstrap';
 
@@ -6,7 +7,7 @@ type FormSelectProps = {
     label?: string;
     text?: string;
     titleOption?: string;
-    options: { value: string | number; key: string }[];
+    options: FormOptions[];
 } & React.ComponentProps<typeof Form.Select>;
 
 const FormSelect: React.FC<FormSelectProps> = ({
@@ -29,9 +30,9 @@ const FormSelect: React.FC<FormSelectProps> = ({
                         className="shadow-none"
                         {...rest}
                     >
-                        <option>{`--- ${(
-                            titleOption || 'Select an option'
-                        ).toUpperCase()} ---`}</option>
+                        {titleOption && (
+                            <option>{`--- ${titleOption.toUpperCase()} ---`}</option>
+                        )}
                         {options.map(({ key, value }) => (
                             <option key={value} value={value}>
                                 {key}
