@@ -1,5 +1,8 @@
+import { FormType } from '@/types';
+import FacilityForm from './components/FacilityForm';
+
 const CreateFacility: React.FC = () => {
-    return <div>CreateFacility</div>;
+    return <FacilityForm formType={FormType.CREATE} />;
 };
 
 export default CreateFacility;

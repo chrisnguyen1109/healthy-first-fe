@@ -1,4 +1,4 @@
-import CustomTable from '@/components/CustomTable';
+import CustomTable from '@/components/table/CustomTable';
 import { DEFAULT_PAGINATION } from '@/config';
 import { useDialog } from '@/hooks';
 import {

@@ -1,4 +1,4 @@
-import CustomTable from '@/components/CustomTable';
+import CustomTable from '@/components/table/CustomTable';
 import { DEFAULT_PAGINATION } from '@/config';
 import { useDialog } from '@/hooks';
 import {
@@ -118,24 +118,28 @@ const UserTable: React.FC<UserTableProps> = ({
     );
 
     const actions = (data: User) => (
-        <div className="d-flex gap-3 justify-content-center">
-            <Button
-                variant="outline-info"
-                size="sm"
-                title="Active user"
-                onClick={() => activeUser(data._id)}
-            >
-                <i className="mdi mdi-account-check"></i>
-            </Button>
-            <Button
-                variant="outline-danger"
-                size="sm"
-                title="Inactive user"
-                onClick={() => inactiveUser(data._id)}
-            >
-                <i className="mdi mdi-account-off"></i>
-            </Button>
-        </div>
+        <>
+            {data.role !== UserRole.ADMIN && (
+                <div className="d-flex gap-3 justify-content-center">
+                    <Button
+                        variant="outline-info"
+                        size="sm"
+                        title="Active user"
+                        onClick={() => activeUser(data._id)}
+                    >
+                        <i className="mdi mdi-account-check"></i>
+                    </Button>
+                    <Button
+                        variant="outline-danger"
+                        size="sm"
+                        title="Inactive user"
+                        onClick={() => inactiveUser(data._id)}
+                    >
+                        <i className="mdi mdi-account-off"></i>
+                    </Button>
+                </div>
+            )}
+        </>
     );
 
     return (

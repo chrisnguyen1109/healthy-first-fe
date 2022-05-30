@@ -6,11 +6,6 @@ export enum UserRole {
     EXPERT = 'expert',
 }
 
-export const USER_ROLE_OPTIONS = Object.values(UserRole).map(el => ({
-    key: el.replace(/\b\w/g, c => c.toUpperCase()),
-    value: el,
-}));
-
 export const USER_STATUS_OPTIONS = [
     {
         key: 'Active',

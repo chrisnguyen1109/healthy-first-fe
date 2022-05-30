@@ -1,18 +1,17 @@
 import { logoutApi } from '@/api/authApi';
-import { QUERY_AUTH } from '@/config';
+import { useAuthentication } from '@/hooks';
 import { useEffect, useState } from 'react';
 import { Image, Spinner } from 'react-bootstrap';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation } from 'react-query';
 import { Link } from 'react-router-dom';
 
 const UserDropdown: React.FC = () => {
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
-    const queryClient = useQueryClient();
 
-    const { mutate, isLoading } = useMutation(logoutApi, {
-        onSuccess: () => {
-            queryClient.setQueryData(QUERY_AUTH, null);
-        },
+    const { data: currentAuth } = useAuthentication();
+
+    const { mutate: logOutAccount, isLoading } = useMutation(logoutApi, {
+        onSuccess: () => window.location.reload(),
     });
 
     useEffect(() => {
@@ -41,8 +40,11 @@ const UserDropdown: React.FC = () => {
                         className="nav-link cursor-pointer"
                         onClick={toggleDropdownClick}
                     >
+                        <div className="text-muted fs-5 m-r-10 fw-bold">
+                            {currentAuth?.data?.record.fullName}
+                        </div>
                         <Image
-                            src="https://res.cloudinary.com/chriscloud1109/image/upload/v1651629584/media/default_gr1p4q.jpg"
+                            src={currentAuth?.data?.record.avatar}
                             alt="avatar"
                             roundedCircle
                             width="31"
@@ -65,7 +67,7 @@ const UserDropdown: React.FC = () => {
                     </Link>
                     <li
                         className="dropdown-item cursor-pointer"
-                        onClick={() => mutate()}
+                        onClick={() => logOutAccount()}
                     >
                         <i className="ti-shift-left m-r-10 m-l-5"></i>
                         Logout

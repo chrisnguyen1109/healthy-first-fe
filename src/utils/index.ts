@@ -4,3 +4,4 @@ export * from './addAllOption';
 export * from './removeAllOption';
 export * from './convertSortFilter';
 export * from './renderFacilityType';
+export * from './capitalizeWord';

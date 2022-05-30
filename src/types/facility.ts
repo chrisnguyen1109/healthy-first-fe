@@ -5,11 +5,6 @@ export enum BusinessType {
     FOOD_SERVICE = 'food_service',
 }
 
-export const BUSINESS_TYPE_OPTIONS = Object.values(BusinessType).map(el => ({
-    key: el.replace(/\b\w/g, c => c.toUpperCase()),
-    value: el,
-}));
-
 export interface Facility extends HasId, TimeStamp {
     name: string;
     address: string;
@@ -25,7 +20,17 @@ export interface Facility extends HasId, TimeStamp {
     description?: string;
 }
 
-export type FacilityCreate = Omit<Facility, keyof HasId | keyof TimeStamp>;
+export interface FacilityCreate {
+    name: string;
+    address: string;
+    owner: string;
+    provinceCode: number;
+    districtCode: number;
+    wardCode: number;
+    phoneNumber: string;
+    businessType: BusinessType;
+    description?: string;
+}
 
 export type FacilityFields =
     | 'name'

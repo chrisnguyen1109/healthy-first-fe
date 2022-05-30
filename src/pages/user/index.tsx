@@ -1,13 +1,28 @@
 import { DEFAULT_FILTER } from '@/config';
-import { useDeleteUser, useUpdateUser, useUsers } from '@/hooks';
-import { SortChangeProps, SortType, UserFilter, UserQuery } from '@/types';
+import {
+    useAuthentication,
+    useDeleteUser,
+    useUpdateUser,
+    useUsers,
+} from '@/hooks';
+import {
+    SortChangeProps,
+    SortType,
+    UserFilter,
+    UserQuery,
+    UserRole,
+} from '@/types';
 import { convertSortFilter } from '@/utils';
 import { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import UserSearch from './components/UserSearch';
 import UserTable from './components/UserTable';
 
 const UserList: React.FC = () => {
+    const { data: currentAuth } = useAuthentication();
+    const currentRole = currentAuth?.data?.record.role;
+
     const [filter, setFilter] = useState<UserQuery>(DEFAULT_FILTER);
 
     const [sortQuery, setSortQuery] = useState<Record<
@@ -41,6 +56,10 @@ const UserList: React.FC = () => {
             },
         }
     );
+
+    if (currentRole === UserRole.EXPERT) {
+        return <Navigate to="/" replace />;
+    }
 
     const pageChangeHandler = (selected: number) => {
         setFilter(prev => ({

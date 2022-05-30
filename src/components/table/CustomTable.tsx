@@ -6,7 +6,7 @@ import {
     SortType,
 } from '@/types';
 import { ReactNode } from 'react';
-import CardLayout from './CardLayout';
+import CardLayout from '../CardLayout';
 import TablePagination from './TablePagination';
 import TableSort from './TableSort';
 
@@ -56,6 +56,8 @@ const CustomTable: React.FC<
     onSortChange,
 }) => {
     const sortChangeHandler = (column: ColumnsType) => {
+        if (!column.showSort) return;
+
         switch (column.sortType) {
             case SortType.ASC: {
                 return onSortChange({
@@ -119,6 +121,16 @@ const CustomTable: React.FC<
                         </tr>
                     </thead>
                     <tbody>
+                        {dataSource.length === 0 && (
+                            <tr>
+                                <td
+                                    colSpan={columns.length}
+                                    className="text-center"
+                                >
+                                    No matching data 😢
+                                </td>
+                            </tr>
+                        )}
                         {dataSource.map(data => (
                             <tr key={data._id}>
                                 {columns.map(column => {

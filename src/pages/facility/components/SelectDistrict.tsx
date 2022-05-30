@@ -1,18 +1,21 @@
 import FormSelect from '@/components/form/FormSelect';
 import { useDistrictByProvince } from '@/hooks';
-import { UserRole } from '@/types';
+import { FormType, UserRole } from '@/types';
 import { addAllOptions } from '@/utils';
+import { Col } from 'react-bootstrap';
 
 interface SelectDistrictProps {
     currentRole: UserRole;
     provinceId: number;
-    isQuery: boolean;
+    isQuery?: boolean;
+    formType?: FormType;
 }
 
 const SelectDistrict: React.FC<SelectDistrictProps> = ({
     currentRole,
     provinceId,
     isQuery = false,
+    formType,
 }) => {
     const { data: districts } = useDistrictByProvince(provinceId, {
         enabled:
@@ -34,17 +37,20 @@ const SelectDistrict: React.FC<SelectDistrictProps> = ({
     return (
         <>
             {isQuery ? (
-                <FormSelect
-                    name="districtCode"
-                    label="District"
-                    options={addAllOptions(DISTRICT_OPTIONS)}
-                />
+                <Col>
+                    <FormSelect
+                        name="districtCode"
+                        label="District"
+                        options={addAllOptions(DISTRICT_OPTIONS)}
+                    />
+                </Col>
             ) : (
                 <FormSelect
                     name="districtCode"
                     label="District"
                     titleOption="Select district"
                     options={DISTRICT_OPTIONS}
+                    disabled={formType === FormType.EDIT}
                 />
             )}
         </>

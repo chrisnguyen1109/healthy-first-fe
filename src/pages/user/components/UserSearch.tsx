@@ -1,12 +1,9 @@
 import CardLayout from '@/components/CardLayout';
 import FormInput from '@/components/form/FormInput';
 import FormSelect from '@/components/form/FormSelect';
-import {
-    UserFilter,
-    UserRole,
-    USER_ROLE_OPTIONS,
-    USER_STATUS_OPTIONS,
-} from '@/types';
+import { USER_ROLE_OPTIONS } from '@/config';
+import { useAuthentication } from '@/hooks';
+import { UserFilter, UserRole, USER_STATUS_OPTIONS } from '@/types';
 import { addAllOptions, removeAllOption } from '@/utils';
 import { Form, Formik } from 'formik';
 import { Button, Col, Row, Spinner } from 'react-bootstrap';
@@ -22,9 +19,15 @@ const UserSearch: React.FC<UserSearchProps> = ({
     formLoading,
     onResetTable,
 }) => {
+    const { data: currentAuth } = useAuthentication();
+    const currentRole = currentAuth?.data?.record.role;
+
     const initialValues: Partial<UserFilter> = {
         _q: '',
-        role: 'all' as UserRole,
+        role:
+            currentRole === UserRole.MANAGER
+                ? UserRole.EXPERT
+                : ('all' as UserRole),
         status: 'all' as any,
     };
 
@@ -60,15 +63,17 @@ const UserSearch: React.FC<UserSearchProps> = ({
                                         placeholder="Search users by name, email, role, province and district"
                                     />
                                 </Col>
-                                <Col>
-                                    <FormSelect
-                                        name="role"
-                                        label="Role"
-                                        options={addAllOptions(
-                                            USER_ROLE_OPTIONS
-                                        )}
-                                    />
-                                </Col>
+                                {currentRole === UserRole.ADMIN && (
+                                    <Col>
+                                        <FormSelect
+                                            name="role"
+                                            label="Role"
+                                            options={addAllOptions(
+                                                USER_ROLE_OPTIONS
+                                            )}
+                                        />
+                                    </Col>
+                                )}
                                 <Col>
                                     <FormSelect
                                         name="status"

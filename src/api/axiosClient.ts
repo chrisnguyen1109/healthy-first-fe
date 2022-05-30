@@ -1,5 +1,4 @@
-import { API_URL, QUERY_AUTH } from '@/config';
-import { queryClient } from '@/providers/AppProvider';
+import { API_URL } from '@/config';
 import { ResponseData } from '@/types';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -45,7 +44,9 @@ axiosClient.interceptors.response.use(
 
                 return axiosClient(error.config);
             } catch (_) {
-                calledApi && queryClient.setQueryData(QUERY_AUTH, null);
+                if (calledApi) {
+                    window.location.reload();
+                }
             }
         }
 

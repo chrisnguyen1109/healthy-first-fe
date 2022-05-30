@@ -1,8 +1,9 @@
 import CardLayout from '@/components/CardLayout';
 import FormInput from '@/components/form/FormInput';
 import FormSelect from '@/components/form/FormSelect';
+import { BUSINESS_TYPE_OPTIONS } from '@/config';
 import { useAuthentication } from '@/hooks';
-import { BusinessType, BUSINESS_TYPE_OPTIONS, FacilityFilter } from '@/types';
+import { BusinessType, FacilityFilter } from '@/types';
 import { addAllOptions, removeAllOption } from '@/utils';
 import { Form, Formik } from 'formik';
 import { Button, Col, Row, Spinner } from 'react-bootstrap';
@@ -76,35 +77,31 @@ const FacilitySearch: React.FC<FacilitySearchProps> = ({
                                 </Col>
                                 {currentAuth?.data?.record.role && (
                                     <>
-                                        <Col>
-                                            <SelectProvince
-                                                currentRole={
-                                                    currentAuth.data.record.role
-                                                }
-                                                isQuery
-                                            />
-                                        </Col>
-                                        <Col>
-                                            <SelectDistrict
-                                                currentRole={
-                                                    currentAuth.data.record.role
-                                                }
-                                                provinceId={
-                                                    currentAuth.data.record
-                                                        .provinceCode ??
-                                                    formik.values.provinceCode!
-                                                }
-                                                isQuery
-                                            />
-                                        </Col>
-                                        <Col>
-                                            <SelectWard
-                                                districtId={
-                                                    formik.values.districtCode!
-                                                }
-                                                isQuery
-                                            />
-                                        </Col>
+                                        <SelectProvince
+                                            currentRole={
+                                                currentAuth.data.record.role
+                                            }
+                                            isQuery
+                                        />
+                                        <SelectDistrict
+                                            currentRole={
+                                                currentAuth.data.record.role
+                                            }
+                                            provinceId={
+                                                currentAuth.data.record
+                                                    .provinceCode ??
+                                                formik.values.provinceCode!
+                                            }
+                                            isQuery
+                                        />
+                                        <SelectWard
+                                            districtId={
+                                                currentAuth.data.record
+                                                    .districtCode ??
+                                                formik.values.districtCode!
+                                            }
+                                            isQuery
+                                        />
                                     </>
                                 )}
                             </Row>

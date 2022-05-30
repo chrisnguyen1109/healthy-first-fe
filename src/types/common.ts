@@ -79,3 +79,8 @@ export interface FormOptions {
     value: string | number;
     key: string;
 }
+
+export enum FormType {
+    CREATE = 'create',
+    EDIT = 'edit',
+}

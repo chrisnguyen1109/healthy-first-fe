@@ -1,16 +1,21 @@
 import FormInput from '@/components/form/FormInput';
 import FormSelect from '@/components/form/FormSelect';
+import { USER_ROLE_OPTIONS } from '@/config';
 import { useDistrictByProvince, useProvince } from '@/hooks';
-import { UserCreate, UserRole, USER_ROLE_OPTIONS } from '@/types';
+import { UserCreate, UserRole } from '@/types';
 import { Form, FormikProps } from 'formik';
 import { Button, Spinner } from 'react-bootstrap';
 import UploadAvatar from './UploadAvatar';
 
 interface CreateUserFormProps {
     formik: FormikProps<UserCreate>;
+    currentRole?: UserRole;
 }
 
-const CreateUserForm: React.FC<CreateUserFormProps> = ({ formik }) => {
+const CreateUserForm: React.FC<CreateUserFormProps> = ({
+    formik,
+    currentRole,
+}) => {
     const checkProvinceList =
         formik.values.role === UserRole.MANAGER ||
         formik.values.role === UserRole.EXPERT;
@@ -60,6 +65,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({ formik }) => {
                 label="Role"
                 titleOption="Select role"
                 options={USER_ROLE_OPTIONS}
+                disabled={currentRole === UserRole.MANAGER}
             />
             <UploadAvatar setFieldValue={formik.setFieldValue} />
             {checkProvinceList && (
@@ -68,6 +74,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({ formik }) => {
                     label="Province"
                     titleOption="Select province"
                     options={PROVINCE_OPTIONS}
+                    disabled={currentRole === UserRole.MANAGER}
                 />
             )}
             {formik.values.role === UserRole.EXPERT && (

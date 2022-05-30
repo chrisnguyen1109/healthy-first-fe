@@ -1,4 +1,5 @@
-import { Pagination } from '@/types';
+import { BusinessType, Pagination, UserRole } from '@/types';
+import { capitalizeWord } from '@/utils';
 
 export const API_URL = process.env.REACT_APP_API_URL;
 
@@ -29,3 +30,16 @@ export const DEFAULT_FILTER = {
 };
 
 export const PAGE_LIMIT_OPTIONS = [DEFAULT_LIMIT, 10, 20];
+
+export const BUSINESS_TYPE_OPTIONS = Object.values(BusinessType).map(el => ({
+    key: capitalizeWord(el),
+    value: el,
+}));
+
+export const USER_ROLE_OPTIONS = Object.values(UserRole).map(el => ({
+    key: capitalizeWord(el),
+    value: el,
+}));
+
+export const PHONE_REG_EXP =
+    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;

@@ -1,9 +1,9 @@
 import { uploadAvatar } from '@/api/authApi';
 import CardLayout from '@/components/CardLayout';
-import { useCreateUser } from '@/hooks';
+import { useAuthentication, useCreateUser } from '@/hooks';
 import { UserCreate, UserRole } from '@/types';
 import { Formik, FormikHelpers } from 'formik';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import CreateUserForm from './components/CreateUserForm';
@@ -14,22 +14,34 @@ interface UserCreateForm extends UserCreate {
 
 const CreateUser: React.FC = () => {
     const navigate = useNavigate();
+    const { data: currentAuth } = useAuthentication();
+    const currentRole = currentAuth?.data?.record.role;
 
     const { mutate } = useCreateUser({
         onSuccess: response => {
             if (response.message === 'Success' && response.data?.record) {
-                toast.success('Creating user successfully');
+                toast.success('Create user successfully');
                 navigate('/user');
             }
         },
     });
 
+    if (currentRole === UserRole.EXPERT) {
+        return <Navigate to="/" replace />;
+    }
+
     const initialValues: UserCreateForm = {
         fullName: '',
         email: '',
         password: '',
-        avatar: '',
-        role: '' as UserRole,
+        avatar: undefined,
+        role:
+            currentRole === UserRole.MANAGER
+                ? UserRole.EXPERT
+                : ('' as UserRole),
+        provinceCode: currentAuth?.data?.record.provinceCode
+            ? currentAuth.data.record.provinceCode
+            : ('' as any),
     };
 
     const createUserSchema: Yup.SchemaOf<UserCreateForm> = Yup.object({
@@ -99,8 +111,11 @@ const CreateUser: React.FC = () => {
                 initialValues={initialValues}
                 onSubmit={onSubmit}
                 validationSchema={createUserSchema}
+                enableReinitialize
             >
-                {formik => <CreateUserForm formik={formik} />}
+                {formik => (
+                    <CreateUserForm formik={formik} currentRole={currentRole} />
+                )}
             </Formik>
         </CardLayout>
     );
