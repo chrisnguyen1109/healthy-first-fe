@@ -3,14 +3,18 @@ import { DEFAULT_PAGINATION } from '@/config';
 import { useDialog } from '@/hooks';
 import {
     BusinessType,
+    CertificateCreate,
+    CertificateRecordResponse,
     ColumnsType,
     Facility,
+    FacilityCertificate,
     FacilityListResponse,
+    FacilityRecordResponse,
     ResponseData,
     SortChangeProps,
     SortType,
 } from '@/types';
-import { renderFacilityType } from '@/utils';
+import { renderFacilityCertificate, renderFacilityType } from '@/utils';
 import { Button } from 'react-bootstrap';
 import { UseMutateFunction } from 'react-query';
 import { Link } from 'react-router-dom';
@@ -28,6 +32,18 @@ interface FacilityTableProps {
         string,
         unknown
     >;
+    onCreateCertificate: UseMutateFunction<
+        CertificateRecordResponse,
+        unknown,
+        CertificateCreate,
+        unknown
+    >;
+    onRevokeCertificate: UseMutateFunction<
+        FacilityRecordResponse,
+        unknown,
+        string,
+        unknown
+    >;
 }
 
 const FacilityTable: React.FC<FacilityTableProps> = ({
@@ -38,6 +54,8 @@ const FacilityTable: React.FC<FacilityTableProps> = ({
     onSortChange,
     sortQuery,
     onDeleteFacility,
+    onCreateCertificate,
+    onRevokeCertificate,
 }) => {
     const { setConfirm } = useDialog();
 
@@ -69,6 +87,14 @@ const FacilityTable: React.FC<FacilityTableProps> = ({
             sortType: sortQuery['businessType'],
         },
         {
+            key: 'facilityCertificate',
+            title: 'Certificate',
+            render: (value: FacilityCertificate) =>
+                renderFacilityCertificate(value),
+            showSort: true,
+            sortType: sortQuery['facilityCertificate'],
+        },
+        {
             key: 'provinceName',
             title: 'Province name',
             showSort: true,
@@ -86,19 +112,24 @@ const FacilityTable: React.FC<FacilityTableProps> = ({
             showSort: true,
             sortType: sortQuery['wardName'],
         },
-        {
-            key: 'address',
-            title: 'Address',
-            width: 100,
-            render: (value: string) => (
-                <div className="text-ellipsis">{value}</div>
-            ),
-        },
     ];
 
     const deleteFacility = (id: string) => {
         setConfirm('Are you sure you want to delete this facility?', () =>
             onDeleteFacility(id)
+        );
+    };
+
+    const certifyFacility = (id: string) => {
+        setConfirm('Are you sure you want to certify this facility?', () =>
+            onCreateCertificate({ facility: id })
+        );
+    };
+
+    const revokeFacilityCertificate = (id: string) => {
+        setConfirm(
+            'Are you sure you want to revoke certificate of this facility?',
+            () => onRevokeCertificate(id)
         );
     };
 
@@ -123,6 +154,60 @@ const FacilityTable: React.FC<FacilityTableProps> = ({
             >
                 <i className="mdi mdi-delete-forever"></i>
             </Button>
+            {(() => {
+                switch (data.facilityCertificate) {
+                    case FacilityCertificate.PENDING: {
+                        return (
+                            <Link to={`/certificate/edit/${data.certificate}`}>
+                                <Button
+                                    variant="outline-primary"
+                                    size="sm"
+                                    title="View certificate"
+                                >
+                                    <i className="mdi mdi-eye"></i>
+                                </Button>
+                            </Link>
+                        );
+                    }
+                    case FacilityCertificate.CERTIFIED: {
+                        return (
+                            <>
+                                <Link to={`/certificate/${data.certificate}`}>
+                                    <Button
+                                        variant="outline-secondary"
+                                        size="sm"
+                                        title="Print certificate"
+                                    >
+                                        <i className="mdi mdi-printer"></i>
+                                    </Button>
+                                </Link>
+                                <Button
+                                    variant="outline-warning"
+                                    size="sm"
+                                    title="Revoke certificate"
+                                    onClick={() =>
+                                        revokeFacilityCertificate(data._id)
+                                    }
+                                >
+                                    <i className="mdi mdi-key-remove"></i>
+                                </Button>
+                            </>
+                        );
+                    }
+                    default: {
+                        return (
+                            <Button
+                                variant="outline-success"
+                                size="sm"
+                                title="Certify"
+                                onClick={() => certifyFacility(data._id)}
+                            >
+                                <i className="mdi mdi-file-document"></i>
+                            </Button>
+                        );
+                    }
+                }
+            })()}
         </div>
     );
 

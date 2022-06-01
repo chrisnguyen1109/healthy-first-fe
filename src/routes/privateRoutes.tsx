@@ -13,6 +13,11 @@ const CreateFacility = React.lazy(
 );
 const EditFacility = React.lazy(() => import('@/pages/facility/EditFacility'));
 
+const CertificateList = React.lazy(() => import('@/pages/certificate'));
+const UpdateCertificate = React.lazy(
+    () => import('@/pages/certificate/UpdateCertificate')
+);
+
 const App = () => {
     return (
         <MainLayout>
@@ -32,6 +37,8 @@ const privateRoutes: RouteObject[] = [
             { path: '/facility', element: <FacilityList /> },
             { path: '/facility/create', element: <CreateFacility /> },
             { path: '/facility/edit/:id', element: <EditFacility /> },
+            { path: '/certificate', element: <CertificateList /> },
+            { path: '/certificate/edit/:id', element: <UpdateCertificate /> },
         ],
     },
 ];

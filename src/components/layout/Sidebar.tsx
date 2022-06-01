@@ -41,6 +41,14 @@ const Sidebar: React.FC = () => {
                                 </span>
                             </div>
                         </NavLink>
+                        <NavLink to="/certificate" className={navLinkClasses}>
+                            <div className="sidebar-link cursor-pointer">
+                                <i className="mdi mdi-certificate"></i>
+                                <span className="hide-menu">
+                                    Certificate Management
+                                </span>
+                            </div>
+                        </NavLink>
                     </ul>
                 </nav>
             </div>

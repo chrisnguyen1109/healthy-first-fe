@@ -5,6 +5,14 @@ export enum BusinessType {
     FOOD_SERVICE = 'food_service',
 }
 
+export enum FacilityCertificate {
+    NO_CERTIFICATE = 'no_certificate',
+    PENDING = 'pending',
+    CERTIFIED = 'certified',
+    REVOKED = 'revoked',
+    EXPIRED = 'expired',
+}
+
 export interface Facility extends HasId, TimeStamp {
     name: string;
     address: string;
@@ -18,6 +26,8 @@ export interface Facility extends HasId, TimeStamp {
     phoneNumber: string;
     businessType: BusinessType;
     description?: string;
+    facilityCertificate: FacilityCertificate;
+    certificate?: string;
 }
 
 export interface FacilityCreate {
@@ -47,6 +57,7 @@ export interface FacilityFilter {
     provinceCode: number;
     districtCode: number;
     wardCode: number;
+    facilityCertificate: FacilityCertificate;
 }
 
 export type FacilityQuery = Partial<

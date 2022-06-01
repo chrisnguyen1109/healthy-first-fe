@@ -1,5 +1,10 @@
-import { DEFAULT_FILTER } from '@/config';
-import { useDeleteFacility, useFacilities } from '@/hooks';
+import { revokeCertificateFacility } from '@/api/certificate';
+import { DEFAULT_FILTER, QUERY_FACILITY } from '@/config';
+import {
+    useCreateCertificate,
+    useDeleteFacility,
+    useFacilities,
+} from '@/hooks';
 import {
     SortChangeProps,
     SortType,
@@ -8,12 +13,16 @@ import {
 } from '@/types';
 import { convertSortFilter } from '@/utils';
 import { useState } from 'react';
+import { useMutation, useQueryClient } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import FacilitySearch from './components/FacilitySearch';
 import FacilityTable from './components/FacilityTable';
 
 const FacilityList: React.FC = () => {
+    const clientQuery = useQueryClient();
     const [filter, setFilter] = useState<FacilityQuery>(DEFAULT_FILTER);
+    const navigate = useNavigate();
 
     const [sortQuery, setSortQuery] = useState<Record<
         string,
@@ -35,6 +44,27 @@ const FacilityList: React.FC = () => {
         useDeleteFacility({
             onSuccess: () => {
                 toast.success('Delete facility successfully!');
+            },
+        });
+
+    const { mutate: createCertificate, isLoading: creatingCertificate } =
+        useCreateCertificate({
+            onSuccess: response => {
+                if (response.message === 'Success' && response.data?.record) {
+                    navigate(`/certificate/edit/${response.data.record._id}`);
+                }
+            },
+        });
+
+    const { mutate: revokeCertificate, isLoading: revokingCertificate } =
+        useMutation((id: string) => revokeCertificateFacility(id), {
+            onSuccess: response => {
+                if (response.message === 'Success' && response.data?.record) {
+                    toast.success(
+                        'Revoke certificate of this facility successfully!'
+                    );
+                    clientQuery.invalidateQueries([QUERY_FACILITY]);
+                }
             },
         });
 
@@ -73,7 +103,11 @@ const FacilityList: React.FC = () => {
         setSortQuery(null);
     };
 
-    const tableLoading = isLoading || deletingFacility;
+    const tableLoading =
+        isLoading ||
+        deletingFacility ||
+        creatingCertificate ||
+        revokingCertificate;
 
     return (
         <div>
@@ -90,6 +124,8 @@ const FacilityList: React.FC = () => {
                 onSortChange={sortUserTableHandler}
                 sortQuery={sortQuery ?? {}}
                 onDeleteFacility={mutateDeleteFacility}
+                onCreateCertificate={createCertificate}
+                onRevokeCertificate={revokeCertificate}
             />
         </div>
     );

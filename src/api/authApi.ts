@@ -1,15 +1,15 @@
 import { LoginForm, UserRecordResponse } from '@/types';
 import axiosClient from './axiosClient';
 
-const AUTH_RESOURCE = '/auth';
+const AUTH_BASE_URL = '/auth';
 
 export const signinApi = (data: LoginForm): Promise<UserRecordResponse> =>
-    axiosClient.post(`${AUTH_RESOURCE}/login`, data);
+    axiosClient.post(`${AUTH_BASE_URL}/login`, data);
 
 export const getMeApi = (): Promise<UserRecordResponse> =>
-    axiosClient.get(`${AUTH_RESOURCE}/me`);
+    axiosClient.get(`${AUTH_BASE_URL}/me`);
 
-export const logoutApi = () => axiosClient.post(`${AUTH_RESOURCE}/logout`);
+export const logoutApi = () => axiosClient.post(`${AUTH_BASE_URL}/logout`);
 
 export const uploadAvatar = (image: File): Promise<any> => {
     const formData = new FormData();

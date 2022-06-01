@@ -6,17 +6,6 @@ export enum UserRole {
     EXPERT = 'expert',
 }
 
-export const USER_STATUS_OPTIONS = [
-    {
-        key: 'Active',
-        value: 'true',
-    },
-    {
-        key: 'Inactive',
-        value: 'false',
-    },
-];
-
 export interface LoginForm {
     email: string;
     password: string;

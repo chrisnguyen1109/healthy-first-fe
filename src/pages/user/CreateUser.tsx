@@ -62,7 +62,7 @@ const CreateUser: React.FC = () => {
         role: Yup.mixed()
             .oneOf(
                 Object.values(UserRole),
-                'Role is either: admin, manager or expert!'
+                'Role is either: admin, manager or expert'
             )
             .required('Role is required'),
         avatar: Yup.string().url('Invalid avatar format'),

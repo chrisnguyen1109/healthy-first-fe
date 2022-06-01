@@ -1,51 +1,49 @@
 import CardLayout from '@/components/CardLayout';
 import FormInput from '@/components/form/FormInput';
 import FormSelect from '@/components/form/FormSelect';
-import { USER_ROLE_OPTIONS, USER_STATUS_OPTIONS } from '@/config';
-import { useAuthentication } from '@/hooks';
-import { UserFilter, UserRole } from '@/types';
+import { CERTIFICATE_REVOKE_OPTIONS, CERTIFICATE_STATUS } from '@/config';
+import { CertificateFilter } from '@/types';
 import { addAllOptions, removeAllOption } from '@/utils';
+import dayjs from 'dayjs';
 import { Form, Formik } from 'formik';
 import { Button, Col, Row, Spinner } from 'react-bootstrap';
 
-interface UserSearchProps {
-    onSearchChange: (data: Partial<UserFilter>) => void;
+interface CertificateSearchProps {
+    onSearchChange: (data: Partial<CertificateFilter>) => void;
     onResetTable: () => void;
     formLoading: boolean;
 }
 
-const UserSearch: React.FC<UserSearchProps> = ({
-    onSearchChange,
+const CertificateSearch: React.FC<CertificateSearchProps> = ({
     formLoading,
     onResetTable,
+    onSearchChange,
 }) => {
-    const { data: currentAuth } = useAuthentication();
-    const currentRole = currentAuth?.data?.record.role;
-
-    const initialValues: Partial<UserFilter> = {
+    const initialValues: Partial<CertificateFilter> = {
         _q: '',
-        role:
-            currentRole === UserRole.MANAGER
-                ? UserRole.EXPERT
-                : ('all' as UserRole),
         status: 'all' as any,
+        isRevoked: 'all' as any,
+        startDate_gte: '',
+        endDate_lte: '',
     };
 
-    const onSubmit = (data: Partial<UserFilter>) => {
+    const onSubmit = (data: Partial<CertificateFilter>) => {
         onSearchChange({
             ...data,
-            role: removeAllOption(data.role),
             status: removeAllOption(data.status),
+            isRevoked: removeAllOption(data.isRevoked),
+            startDate_gte: data.startDate_gte
+                ? dayjs(data.startDate_gte).format('MM/DD/YYYY')
+                : undefined,
+            endDate_lte: data.endDate_lte
+                ? dayjs(data.endDate_lte).format('MM/DD/YYYY')
+                : undefined,
         });
     };
 
     return (
         <CardLayout>
-            <Formik
-                initialValues={initialValues}
-                onSubmit={onSubmit}
-                enableReinitialize
-            >
+            <Formik initialValues={initialValues} onSubmit={onSubmit}>
                 {formik => {
                     const resetTableHandler = () => {
                         formik.resetForm();
@@ -60,27 +58,39 @@ const UserSearch: React.FC<UserSearchProps> = ({
                                     <FormInput
                                         name="_q"
                                         label="Search"
-                                        placeholder="Search users by name, email, role, province and district"
+                                        placeholder="Search certificates by name"
                                     />
                                 </Col>
-                                {currentRole === UserRole.ADMIN && (
-                                    <Col>
-                                        <FormSelect
-                                            name="role"
-                                            label="Role"
-                                            options={addAllOptions(
-                                                USER_ROLE_OPTIONS
-                                            )}
-                                        />
-                                    </Col>
-                                )}
                                 <Col>
                                     <FormSelect
                                         name="status"
                                         label="Status"
                                         options={addAllOptions(
-                                            USER_STATUS_OPTIONS
+                                            CERTIFICATE_STATUS
                                         )}
+                                    />
+                                </Col>
+                                <Col>
+                                    <FormSelect
+                                        name="isRevoked"
+                                        label="Revoked"
+                                        options={addAllOptions(
+                                            CERTIFICATE_REVOKE_OPTIONS
+                                        )}
+                                    />
+                                </Col>
+                                <Col>
+                                    <FormInput
+                                        name="startDate_gte"
+                                        label="Start date"
+                                        type="date"
+                                    />
+                                </Col>
+                                <Col>
+                                    <FormInput
+                                        name="endDate_lte"
+                                        label="End date"
+                                        type="date"
                                     />
                                 </Col>
                             </Row>
@@ -119,4 +129,4 @@ const UserSearch: React.FC<UserSearchProps> = ({
     );
 };
 
-export default UserSearch;
+export default CertificateSearch;

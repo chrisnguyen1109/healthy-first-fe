@@ -1,9 +1,9 @@
 import CardLayout from '@/components/CardLayout';
 import FormInput from '@/components/form/FormInput';
 import FormSelect from '@/components/form/FormSelect';
-import { BUSINESS_TYPE_OPTIONS } from '@/config';
+import { BUSINESS_TYPE_OPTIONS, FACILITY_CERTIFICATE_OPTIONS } from '@/config';
 import { useAuthentication } from '@/hooks';
-import { BusinessType, FacilityFilter } from '@/types';
+import { BusinessType, FacilityCertificate, FacilityFilter } from '@/types';
 import { addAllOptions, removeAllOption } from '@/utils';
 import { Form, Formik } from 'formik';
 import { Button, Col, Row, Spinner } from 'react-bootstrap';
@@ -30,6 +30,7 @@ const FacilitySearch: React.FC<FacilitySearchProps> = ({
         districtCode: 'all' as any,
         wardCode: 'all' as any,
         provinceCode: 'all' as any,
+        facilityCertificate: 'all' as FacilityCertificate,
     };
 
     const onSubmit = (data: Partial<FacilityFilter>) => {
@@ -39,6 +40,7 @@ const FacilitySearch: React.FC<FacilitySearchProps> = ({
             districtCode: removeAllOption(data.districtCode),
             provinceCode: removeAllOption(data.provinceCode),
             wardCode: removeAllOption(data.wardCode),
+            facilityCertificate: removeAllOption(data.facilityCertificate),
         });
     };
 
@@ -72,6 +74,15 @@ const FacilitySearch: React.FC<FacilitySearchProps> = ({
                                         label="Business Type"
                                         options={addAllOptions(
                                             BUSINESS_TYPE_OPTIONS
+                                        )}
+                                    />
+                                </Col>
+                                <Col>
+                                    <FormSelect
+                                        name="facilityCertificate"
+                                        label="Certificate"
+                                        options={addAllOptions(
+                                            FACILITY_CERTIFICATE_OPTIONS
                                         )}
                                     />
                                 </Col>
