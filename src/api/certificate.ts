@@ -5,6 +5,7 @@ import {
     CertificateStatus,
     FacilityRecordResponse,
     InspectedFoods,
+    ResponseData,
 } from '@/types';
 import axiosClient from './axiosClient';
 
@@ -60,7 +61,8 @@ export const updateCertificateFailureStep = (
         `${CERTIFICATE_BASE_URL}/${id}/step/${CertificateStatus.FAILURE}`
     );
 
-export const revokeCertificateFacility = (
-    id: string
-): Promise<FacilityRecordResponse> =>
+export const revokeCertificateFacility = (id: string): Promise<ResponseData> =>
     axiosClient.patch(`facility/${id}/revoke-certificate`);
+
+export const printFacilityCertificate = (id: string): Promise<ResponseData> =>
+    axiosClient.post(`${CERTIFICATE_BASE_URL}/${id}/get-certificate`);

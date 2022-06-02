@@ -14,7 +14,11 @@ import {
     SortChangeProps,
     SortType,
 } from '@/types';
-import { renderFacilityCertificate, renderFacilityType } from '@/utils';
+import {
+    downloadCertificate,
+    renderFacilityCertificate,
+    renderFacilityType,
+} from '@/utils';
 import { Button } from 'react-bootstrap';
 import { UseMutateFunction } from 'react-query';
 import { Link } from 'react-router-dom';
@@ -39,7 +43,13 @@ interface FacilityTableProps {
         unknown
     >;
     onRevokeCertificate: UseMutateFunction<
-        FacilityRecordResponse,
+        ResponseData<any>,
+        unknown,
+        string,
+        unknown
+    >;
+    onPrintCertificate: UseMutateFunction<
+        ResponseData<any>,
         unknown,
         string,
         unknown
@@ -56,6 +66,7 @@ const FacilityTable: React.FC<FacilityTableProps> = ({
     onDeleteFacility,
     onCreateCertificate,
     onRevokeCertificate,
+    onPrintCertificate,
 }) => {
     const { setConfirm } = useDialog();
 
@@ -172,15 +183,26 @@ const FacilityTable: React.FC<FacilityTableProps> = ({
                     case FacilityCertificate.CERTIFIED: {
                         return (
                             <>
-                                <Link to={`/certificate/${data.certificate}`}>
-                                    <Button
-                                        variant="outline-secondary"
-                                        size="sm"
-                                        title="Print certificate"
-                                    >
-                                        <i className="mdi mdi-printer"></i>
-                                    </Button>
-                                </Link>
+                                <Button
+                                    variant="outline-secondary"
+                                    size="sm"
+                                    title="Print certificate"
+                                    onClick={() =>
+                                        onPrintCertificate(data.certificate!)
+                                    }
+                                >
+                                    <i className="mdi mdi-printer"></i>
+                                </Button>
+                                <Button
+                                    variant="outline-purple"
+                                    size="sm"
+                                    title="Download certificate"
+                                    onClick={() =>
+                                        downloadCertificate(data.certificate!)
+                                    }
+                                >
+                                    <i className="mdi mdi-download"></i>
+                                </Button>
                                 <Button
                                     variant="outline-warning"
                                     size="sm"

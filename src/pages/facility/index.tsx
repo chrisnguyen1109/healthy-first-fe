@@ -1,9 +1,10 @@
 import { revokeCertificateFacility } from '@/api/certificate';
-import { DEFAULT_FILTER, QUERY_FACILITY } from '@/config';
+import { API_URL, DEFAULT_FILTER, QUERY_FACILITY } from '@/config';
 import {
     useCreateCertificate,
     useDeleteFacility,
     useFacilities,
+    usePrintCertificate,
 } from '@/hooks';
 import {
     SortChangeProps,
@@ -59,14 +60,17 @@ const FacilityList: React.FC = () => {
     const { mutate: revokeCertificate, isLoading: revokingCertificate } =
         useMutation((id: string) => revokeCertificateFacility(id), {
             onSuccess: response => {
-                if (response.message === 'Success' && response.data?.record) {
+                if (response.message === 'Success' && response.data.url) {
                     toast.success(
                         'Revoke certificate of this facility successfully!'
                     );
                     clientQuery.invalidateQueries([QUERY_FACILITY]);
+                    window.open(response.data.url);
                 }
             },
         });
+
+    const { mutate: printCertificate } = usePrintCertificate();
 
     const pageChangeHandler = (selected: number) => {
         setFilter(prev => ({
@@ -126,6 +130,7 @@ const FacilityList: React.FC = () => {
                 onDeleteFacility={mutateDeleteFacility}
                 onCreateCertificate={createCertificate}
                 onRevokeCertificate={revokeCertificate}
+                onPrintCertificate={printCertificate}
             />
         </div>
     );

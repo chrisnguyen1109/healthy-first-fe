@@ -6,3 +6,4 @@ export * from './useDistrictByProvince';
 export * from './useFacilityQuery';
 export * from './useWardByDistrict';
 export * from './useCertificateQuery';
+export * from './usePrintCertificate';

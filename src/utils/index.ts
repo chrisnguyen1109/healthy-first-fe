@@ -7,3 +7,4 @@ export * from './renderFacilityType';
 export * from './capitalizeWord';
 export * from './renderFacilityCertificate';
 export * from './renderCertificateStatus';
+export * from './downloadCertificate';

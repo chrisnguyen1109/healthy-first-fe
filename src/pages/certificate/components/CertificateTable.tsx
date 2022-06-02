@@ -5,12 +5,14 @@ import {
     CertificateListResponse,
     CertificateStatus,
     ColumnsType,
+    ResponseData,
     SortChangeProps,
     SortType,
 } from '@/types';
-import { renderCertificateStatus } from '@/utils';
+import { downloadCertificate, renderCertificateStatus } from '@/utils';
 import dayjs from 'dayjs';
 import { Button } from 'react-bootstrap';
+import { UseMutateFunction } from 'react-query';
 import { Link } from 'react-router-dom';
 
 interface CertificateTableProps {
@@ -20,6 +22,12 @@ interface CertificateTableProps {
     onPageLimitChange: (selected: number) => void;
     onSortChange: (sortObject: SortChangeProps) => void;
     sortQuery: Record<string, SortType | null>;
+    onPrintCertificate: UseMutateFunction<
+        ResponseData<any>,
+        unknown,
+        string,
+        unknown
+    >;
 }
 
 const CertificateTable: React.FC<CertificateTableProps> = ({
@@ -29,6 +37,7 @@ const CertificateTable: React.FC<CertificateTableProps> = ({
     onPageLimitChange,
     onSortChange,
     sortQuery,
+    onPrintCertificate,
 }) => {
     const columns: ColumnsType<Certificate>[] = [
         {
@@ -90,15 +99,24 @@ const CertificateTable: React.FC<CertificateTableProps> = ({
             </Link>
             {(data.status === CertificateStatus.COMPLETED ||
                 data.status === CertificateStatus.FAILURE) && (
-                <Link to={`/certificate/${data._id}`}>
+                <>
                     <Button
                         variant="outline-secondary"
                         size="sm"
                         title="Print certificate"
+                        onClick={() => onPrintCertificate(data._id)}
                     >
                         <i className="mdi mdi-printer"></i>
                     </Button>
-                </Link>
+                    <Button
+                        variant="outline-purple"
+                        size="sm"
+                        title="Download certificate"
+                        onClick={() => downloadCertificate(data._id)}
+                    >
+                        <i className="mdi mdi-download"></i>
+                    </Button>
+                </>
             )}
         </div>
     );

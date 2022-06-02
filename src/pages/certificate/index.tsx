@@ -1,5 +1,5 @@
 import { DEFAULT_FILTER } from '@/config';
-import { useCertificates } from '@/hooks';
+import { useCertificates, usePrintCertificate } from '@/hooks';
 import {
     CertificateFilter,
     CertificateQuery,
@@ -29,6 +29,8 @@ const CertificateList: React.FC = () => {
     const { data, isLoading } = useCertificates(certificatesFilter, {
         keepPreviousData: true,
     });
+
+    const { mutate: printCertificate } = usePrintCertificate();
 
     const pageChangeHandler = (selected: number) => {
         setFilter(prev => ({
@@ -79,6 +81,7 @@ const CertificateList: React.FC = () => {
                 onPageLimitChange={pageLimitChangeHandler}
                 onSortChange={sortUserTableHandler}
                 sortQuery={sortQuery ?? {}}
+                onPrintCertificate={printCertificate}
             />
         </div>
     );

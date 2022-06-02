@@ -1,3 +1,4 @@
+import { usePrintCertificate } from '@/hooks';
 import { Certificate, CertificateStatus } from '@/types';
 import { Button } from 'react-bootstrap';
 
@@ -9,6 +10,8 @@ interface ResultContentProps {
 const ResultContent: React.FC<ResultContentProps> = ({ id, certificate }) => {
     const checkSuccessCertify =
         certificate.status === CertificateStatus.COMPLETED;
+
+    const { mutate: printCertificate } = usePrintCertificate();
 
     return (
         <div>
@@ -50,7 +53,12 @@ const ResultContent: React.FC<ResultContentProps> = ({ id, certificate }) => {
                 </div>
             </div>
             <div className="text-center mt-4">
-                <Button variant="info" size="lg" className="text-white">
+                <Button
+                    variant="info"
+                    size="lg"
+                    className="text-white"
+                    onClick={() => printCertificate(id)}
+                >
                     Print <i className="mdi mdi-printer"></i>
                 </Button>
             </div>
