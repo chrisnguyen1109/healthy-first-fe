@@ -1,5 +1,5 @@
 import { revokeCertificateFacility } from '@/api/certificate';
-import { API_URL, DEFAULT_FILTER, QUERY_FACILITY } from '@/config';
+import { DEFAULT_FILTER, QUERY_FACILITY } from '@/config';
 import {
     useCreateCertificate,
     useDeleteFacility,
@@ -7,10 +7,10 @@ import {
     usePrintCertificate,
 } from '@/hooks';
 import {
-    SortChangeProps,
-    SortType,
     FacilityFilter,
     FacilityQuery,
+    SortChangeProps,
+    SortType,
 } from '@/types';
 import { convertSortFilter } from '@/utils';
 import { useState } from 'react';

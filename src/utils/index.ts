@@ -8,3 +8,4 @@ export * from './capitalizeWord';
 export * from './renderFacilityCertificate';
 export * from './renderCertificateStatus';
 export * from './downloadCertificate';
+export * from './generateFakeData';

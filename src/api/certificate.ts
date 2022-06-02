@@ -3,7 +3,6 @@ import { SampleContentForm } from '@/pages/certificate/components/SampleContent'
 import {
     CertificateRecordResponse,
     CertificateStatus,
-    FacilityRecordResponse,
     InspectedFoods,
     ResponseData,
 } from '@/types';

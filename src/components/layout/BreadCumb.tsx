@@ -1,6 +1,32 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const BreadCumb: React.FC = () => {
+    const location = useLocation();
+    const pathname = location.pathname;
+
+    const renderBreadcumb = () => {
+        switch (true) {
+            case pathname === '/': {
+                return 'Dashboard';
+            }
+            case pathname.startsWith('/user'): {
+                return 'User Management';
+            }
+            case pathname.startsWith('/facility'): {
+                return 'Facility Management';
+            }
+            case pathname.startsWith('/certificate'): {
+                return 'Certificate Management';
+            }
+            case pathname === '/profile': {
+                return 'Profile';
+            }
+            default: {
+                return '';
+            }
+        }
+    };
+
     return (
         <div className="page-breadcrumb">
             <div className="row align-items-center">
@@ -16,11 +42,11 @@ const BreadCumb: React.FC = () => {
                                 className="breadcrumb-item active"
                                 aria-current="page"
                             >
-                                Dashboard
+                                {renderBreadcumb()}
                             </li>
                         </ol>
                     </nav>
-                    <h1 className="mb-0 fw-bold">Dashboard</h1>
+                    <h1 className="mb-0 fw-bold">{renderBreadcumb()}</h1>
                 </div>
             </div>
         </div>

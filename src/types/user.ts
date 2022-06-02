@@ -11,6 +11,14 @@ export interface LoginForm {
     password: string;
 }
 
+export interface UpdateProfileForm {
+    avatar?: string;
+    email?: string;
+    fullName?: string;
+    password?: string;
+    newPassword?: string;
+}
+
 export interface User extends HasId, TimeStamp {
     fullName: string;
     email: string;

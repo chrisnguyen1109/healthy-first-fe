@@ -18,6 +18,8 @@ const UpdateCertificate = React.lazy(
     () => import('@/pages/certificate/UpdateCertificate')
 );
 
+const Profile = React.lazy(() => import('@/pages/auth/Profile'));
+
 const App = () => {
     return (
         <MainLayout>
@@ -39,6 +41,7 @@ const privateRoutes: RouteObject[] = [
             { path: '/facility/edit/:id', element: <EditFacility /> },
             { path: '/certificate', element: <CertificateList /> },
             { path: '/certificate/edit/:id', element: <UpdateCertificate /> },
+            { path: '/profile', element: <Profile /> },
         ],
     },
 ];

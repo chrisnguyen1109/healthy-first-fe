@@ -1,4 +1,4 @@
-import { LoginForm, UserRecordResponse } from '@/types';
+import { LoginForm, UpdateProfileForm, UserRecordResponse } from '@/types';
 import axiosClient from './axiosClient';
 
 const AUTH_BASE_URL = '/auth';
@@ -25,3 +25,8 @@ export const uploadAvatar = (image: File): Promise<any> => {
         withCredentials: false,
     });
 };
+
+export const updateProfile = (
+    data: UpdateProfileForm
+): Promise<UserRecordResponse> =>
+    axiosClient.patch(`${AUTH_BASE_URL}/me`, data);

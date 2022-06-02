@@ -14,29 +14,17 @@ const TopbarHeader: React.FC<TopbarHeaderProps> = ({ onShowSidebar }) => {
                     <Link to="/" className="navbar-brand">
                         <b className="logo-icon">
                             <Image
-                                src="/assets/images/logo-icon.png"
-                                alt="homepage"
-                                className="dark-logo"
-                            />
-
-                            <Image
-                                src="/assets/images/logo-light-icon.png"
-                                alt="homepage"
-                                className="light-logo"
+                                src="/assets/images/logo.png"
+                                alt="logo"
+                                className="fit-image"
                             />
                         </b>
 
                         <span className="logo-text">
                             <Image
                                 src="/assets/images/logo-text.png"
-                                alt="homepage"
-                                className="dark-logo"
-                            />
-
-                            <Image
-                                src="/assets/images/logo-light-text.png"
-                                className="light-logo"
-                                alt="homepage"
+                                alt="logo text"
+                                className="fit-image"
                             />
                         </span>
                     </Link>

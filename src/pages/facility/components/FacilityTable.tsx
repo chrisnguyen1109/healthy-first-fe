@@ -9,7 +9,6 @@ import {
     Facility,
     FacilityCertificate,
     FacilityListResponse,
-    FacilityRecordResponse,
     ResponseData,
     SortChangeProps,
     SortType,
