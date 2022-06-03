@@ -17,7 +17,7 @@ const CreateUser: React.FC = () => {
     const { data: currentAuth } = useAuthentication();
     const currentRole = currentAuth?.data?.record.role;
 
-    const { mutate } = useCreateUser({
+    const { mutate, isLoading: creatingUser } = useCreateUser({
         onSuccess: response => {
             if (response.message === 'Success' && response.data?.record) {
                 toast.success('Create user successfully');
@@ -114,7 +114,11 @@ const CreateUser: React.FC = () => {
                 enableReinitialize
             >
                 {formik => (
-                    <CreateUserForm formik={formik} currentRole={currentRole} />
+                    <CreateUserForm
+                        formik={formik}
+                        currentRole={currentRole}
+                        creatingUser={creatingUser}
+                    />
                 )}
             </Formik>
         </CardLayout>

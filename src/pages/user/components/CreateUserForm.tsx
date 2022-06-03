@@ -10,11 +10,13 @@ import UploadAvatar from './UploadAvatar';
 interface CreateUserFormProps {
     formik: FormikProps<UserCreate>;
     currentRole?: UserRole;
+    creatingUser: boolean;
 }
 
 const CreateUserForm: React.FC<CreateUserFormProps> = ({
     formik,
     currentRole,
+    creatingUser,
 }) => {
     const checkProvinceList =
         formik.values.role === UserRole.MANAGER ||
@@ -32,7 +34,10 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
         });
 
     const formLoading =
-        loadingProvinces || loadingDistricts || formik.isSubmitting;
+        loadingProvinces ||
+        loadingDistricts ||
+        formik.isSubmitting ||
+        creatingUser;
 
     const PROVINCE_OPTIONS =
         provinces?.map(province => ({
@@ -51,7 +56,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
             <FormInput
                 name="fullName"
                 label="Full Name"
-                placeholder="Chris Nguyen"
+                placeholder="Test Nguyen"
             />
             <FormInput
                 name="email"

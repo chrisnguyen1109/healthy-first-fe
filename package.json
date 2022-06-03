@@ -15,6 +15,7 @@
         "bootstrap": "^5.1.3",
         "dayjs": "^1.11.2",
         "formik": "^2.2.9",
+        "http-proxy-middleware": "^2.0.6",
         "nprogress": "^0.2.0",
         "react": "^17.0.2",
         "react-bootstrap": "^2.4.0",
@@ -31,7 +32,7 @@
     },
     "scripts": {
         "start": "craco start",
-        "build": "craco build",
+        "build": "craco build && cp -r build/* ../back-end/public/",
         "test": "craco test",
         "eject": "craco eject"
     },

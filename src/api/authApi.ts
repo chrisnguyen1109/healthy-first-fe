@@ -22,7 +22,6 @@ export const uploadAvatar = (image: File): Promise<any> => {
 
     return axiosClient.post(process.env.REACT_APP_CLOUD_API!, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
-        withCredentials: false,
     });
 };
 

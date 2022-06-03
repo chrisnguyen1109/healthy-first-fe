@@ -10,7 +10,6 @@ const axiosClient = axios.create({
     headers: {
         'content-type': 'application/json',
     },
-    withCredentials: true,
 });
 
 axiosClient.interceptors.request.use(async config => {
@@ -33,9 +32,7 @@ axiosClient.interceptors.response.use(
         if (error.response.status === 401) {
             requestedRefreshToken = requestedRefreshToken
                 ? requestedRefreshToken
-                : axios.post(`${API_URL}/auth/refresh-token`, undefined, {
-                      withCredentials: true,
-                  });
+                : axios.post(`${API_URL}/auth/refresh-token`);
 
             try {
                 await requestedRefreshToken;
